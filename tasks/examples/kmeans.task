@@ -1,0 +1,16 @@
+{
+    "run_args": {
+        "test_size": 200,
+        "training_batch_size": 5,
+        "training_steps": 100,
+        "training_patches_num": 100,
+        "receptive_field": 6,
+        "centroids": 1000
+    },
+    "tag_name": "kmeansCluster",
+    "test_file_name": "data/bardot/bardot-5.dat",
+    "inference_file_name": [
+        "data/bardot/bardot-5-aug-5.dat"
+    ],
+    "type": "kmeans"
+}

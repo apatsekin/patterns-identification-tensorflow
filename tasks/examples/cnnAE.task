@@ -1,0 +1,27 @@
+{
+    "run_args": {
+        "activation_func": "sigmoid",
+        "batch_normalization": true,
+        "conv_layers": [
+            [3,4,1,true],
+            [3,8,1,true],
+            [3,16,1,true],
+            [3,32,1,true]
+        ],
+        "dropout_prob_keep": 0.7,
+        "dropout_prob_keep_conv": 1.0,
+        "dense_layers": [],
+        "is_maxpool_with_indices": false,
+        "normalize_image": false,
+        "ae_same_weights": false,
+        "supervised_training": false,
+        "training_batch_size": 200,
+        "training_steps": 500
+    },
+    "tag_name": "mnistAE",
+    "test_file_name": "data/mnist/mnist.dat",
+    "inference_file_name": [
+
+    ],
+    "type": "cnnAE"
+}
