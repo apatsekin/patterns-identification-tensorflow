@@ -21,11 +21,23 @@ Available options:
 
 #### Pre-trained CNN
 For instance, MNIST dataset is split into two: 1-5 digits and 6-0.
-The CNN classifier is trained on first one (1-5), than feature-learning part of the model
-is evaluated on the second one (9-0). Feature-learning part - everything but last Softmax layer.
+The CNN classifier is trained on the first one (1-5), than feature-learning part of the model
+is evaluated on the second one (6-0). Feature-learning part - everything but the last Softmax layer.
 
 #### Vector quantization
 Feature learning described in [this paper](https://www-cs.stanford.edu/~acoates/papers/coatesng_nntot2012.pdf). Based on k-means' centroids learning.
+
+### Clustering and Quality Analysis
+Output includes t-SNE embedding for three types of clustering (K-means, DBSCAN, HDBSCAN) and ground truth coloring.
+Here goes the example of ground truth scatter plot for MNIST dataset (output from Quick start example):
+
+![Convolutional autoencoder as a feature-learning method for MNIST. T-SNE.](https://user-images.githubusercontent.com/15197972/39947762-0ec4247e-5541-11e8-83fa-33e5b81d5621.png)
+
+3D PCA reduction using Tensorboard Embedding:
+
+![Convolutional autoencoder as a feature-learning method for MNIST. PCA Tensorboard Projector.](https://user-images.githubusercontent.com/15197972/39952082-b1b0ae9c-555e-11e8-8b2f-a2858aed1091.png)
+
+Note: MNIST dataset has a small enough input size to feed raw images directly into t-SNE. So it's just an example.
 
 ## Installation
 Python 3 and the following libraries are required. Installation using pip:
@@ -38,7 +50,7 @@ pip install tensorflow, matplotlib, scikit_image, hdbscan, imageio, numpy, scipy
 ## Quick start
 To run convolutional autoencoder on MNIST dataset:
 ```commandline
-python cnn_feature_cluster.py --load=examples/cnnAE
+python cnn_feature_cluster.py --task=examples/cnnAE
 ```
 
 After training is finished, test results will be saved in `results` folder. The feature learning quality is evaluated using clustering

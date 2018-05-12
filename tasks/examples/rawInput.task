@@ -1,0 +1,12 @@
+{
+    "run_args": {
+        "test_size": 500,
+        "training_batch_size": 1000,
+        "training_steps": 0
+    },
+    "tag_name": "rawInput",
+    "test_file_name": "data/mnist/mnist.dat",
+    "inference_file_name": [
+    ],
+    "type": "rawInput"
+}

@@ -24,23 +24,23 @@ class KmeansLearning(Experiment):
         '''Generate graph for K-means feature learning'''
         #convert the whole dataset two 3x3=9 array like (1534,510,510,9)
         #with tf.device("/cpu:0"):
-        flatPatchSize = self.params['receptive_field'] **2
+        flat_patch_size = self.params['receptive_field'] **2
         patches = self.graph['extractPatches'] = tf.extract_image_patches(images=self.input_tensor, ksizes=[1, self.params['receptive_field'], self.params['receptive_field'], 1], strides=[1, 1, 1, 1], rates=[1, 1, 1, 1],
                                  padding='SAME')
         #put them all in one batch
-        patchesPerImageAx = patches.get_shape().as_list()[1]
-        self.graph['extractPatches'] = patches = tf.reshape(patches,[-1, flatPatchSize], name="ReshapePatchesToOneArray")
+        patches_per_image_ax = patches.get_shape().as_list()[1]
+        self.graph['extractPatches'] = patches = tf.reshape(patches,[-1, flat_patch_size], name="ReshapePatchesToOneArray")
         #shuffle it
         #patches = tf.random_shuffle(patches, name="ShufflePatches")
         #slice
         #self.graph['rndPatches'] = patches = patches[:10000,:]
 
         #kmeans Input
-        kmeansInput = tf.placeholder(tf.float32, shape=(None, flatPatchSize), name="KmeansInput")
+        kmeans_input = tf.placeholder(tf.float32, shape=(None, flat_patch_size), name="KmeansInput")
         #set input placeholder
-        #kmeansInput = KmeansOp(kmeansInput, None, None, None, None)
+        #kmeans_input = KmeansOp(kmeans_input, None, None, None, None)
         #set other kmeans graph vars
-        self._kmeans_gen_graph(kmeansInput, patchesPerImageAx = patchesPerImageAx, vectorSize = flatPatchSize, num_clusters= self.params['centroids'])
+        self._kmeans_gen_graph(kmeans_input, patchesPerImageAx = patches_per_image_ax, vectorSize = flat_patch_size, num_clusters= self.params['centroids'])
 
     def _img_preprocessing(self, input):
         if self.params['img_preprocess']:

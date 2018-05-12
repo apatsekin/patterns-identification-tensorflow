@@ -6,6 +6,8 @@ class CnnClassifierEncoder(CnnEncoder):
     Mix of autoencoder and classifier to create a feature learning pipeline
     """
     def _build_network(self):
+        assert self.params['supervised_training'] == True, (
+                'AE+Classifier requires supervised training, set supervised_training = True')
         input_image = self._rotate_image(self.input_tensor)
         #encode
         encoded = self._set_conv_layers(input_image)
@@ -22,8 +24,12 @@ class CnnClassifierEncoder(CnnEncoder):
         self.graph['outputLayer'] = decoded = self._set_deconv_layers(decoded)
         with tf.name_scope('io_tensors'):
             tf.summary.image('output', decoded, 6)
-        self.graph['loss'] = tf.reduce_mean(tf.reduce_sum(tf.square(decoded - input_image), [1,2,3])) + tf.reduce_sum(cross_entropy)
+        self.graph['lossAE'] = tf.reduce_mean(tf.reduce_mean(tf.square(decoded - input_image), [1,2,3]))
+        self.graph['lossClsfr'] = tf.reduce_mean(cross_entropy)
+        self.graph['loss'] = 10 * self.graph['lossAE'] + self.graph['lossClsfr']
         tf.summary.scalar("Loss", self.graph['loss'])
+        tf.summary.scalar("LossAE", self.graph['lossAE'])
+        tf.summary.scalar("LossClsfr", self.graph['lossClsfr'])
         correct_prediction = tf.equal(tf.argmax(sft_max_layer, 1), tf.argmax(self._labels_tensor, 1))
         self.graph['accuracy'] = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
         tf.summary.scalar("Accuracy", self.graph['accuracy'])

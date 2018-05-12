@@ -91,17 +91,18 @@ class Experiment:
                                           validation_size=self.params['test_size'],
                                           k_fold=self.params['k_fold'])
 
-    def _setup_embedding_vector(self, index=''):
+    def _setup_embedding_vector(self, index, test_vectors):
         with tf.name_scope('EmbeddingVectors'):
             embeded_shape = [len(self.dataset.test.images), self._get_tensor_flat_size(self.graph['features_layer'])]
             self.embeddingInput = tf.placeholder(tf.float32, embeded_shape, name="EmbeddingVector" + index)
-            embeded_vector = tf.get_variable("embeded_vector" + index, shape=embeded_shape)
+            embeded_vector = tf.get_variable("embeded_vector_" + index, shape=embeded_shape)
             if 'embeded_vectors' not in self.graph:
                 self.graph['embeded_vectors'] = []
             self.graph['embeded_vectors'].append(embeded_vector)
             self.graph['embeded_vector_assign'] = tf.assign(embeded_vector, self.embeddingInput)
             self._init_tf_vars()
             self._create_meta_for_embedding(index, embeded_vector)
+            self.session.run([self.graph['embeded_vector_assign']], {self.embeddingInput: test_vectors})
 
     def _generate_sprites(self):
         if (self.dataset.params['imageWidth'] < 64):
@@ -192,7 +193,11 @@ class Experiment:
         vct_file_name = dsf.file_cut_extension(out_filename) + filename_suffix + '.vct'
 
         labels_file_name = dsf.file_cut_extension(out_filename) + filename_suffix + '.labels'
-        size_vector = numpy.prod(self.graph['features_layer'].get_shape().as_list()[1:])
+        if 'features_layer' not in self.graph:
+            get_size_vector = self._extract_features(dts.images[:1])
+            size_vector = numpy.prod(get_size_vector.shape)
+        else:
+            size_vector = numpy.prod(self.graph['features_layer'].get_shape().as_list()[1:])
 
         with open(vct_file_name, 'wb') as foutVectors:
             dsf.write_meta(foutVectors,
@@ -220,10 +225,12 @@ class Experiment:
             test_vectors = numpy.concatenate(test_vectors, axis=0)
             if type == "test":
                 self._setup_embedding_vector(
-                    index=dsf.extract_file_name_cut_extension(dsf.file_cut_extension(out_filename)).replace("-", ""))
-                self.session.run([self.graph['embeded_vector_assign']], {self.embeddingInput: test_vectors})
+                    index=dsf.extract_file_name_cut_extension(dsf.file_cut_extension(out_filename)).replace("-", ""),
+                    vectors=test_vectors)
+                #self.session.run([self.graph['embeded_vector_assign']], {self.embeddingInput: test_vectors})
             # self.saver = tf.train.Saver(max_to_keep=2)
-            tf.train.Saver(self.graph['embeded_vectors'], max_to_keep=2).save(self.session,
+            if 'embeded_vectors' in self.graph:
+                tf.train.Saver(self.graph['embeded_vectors'], max_to_keep=2).save(self.session,
                                                                               os.path.join(self._log_dir,
                                                                                            "modelEmbeded.ckpt"),
                                                                               100000)
@@ -240,6 +247,10 @@ class Experiment:
 
     @abstractmethod
     def _build_network(self):
+        pass
+
+    @abstractmethod
+    def _setup_embedding_vector(self, index, vectors):
         pass
 
     @abstractmethod

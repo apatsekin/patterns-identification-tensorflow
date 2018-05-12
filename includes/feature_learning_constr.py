@@ -3,6 +3,7 @@ from includes.cnn_autoencoder_class import CnnEncoder
 
 from includes.kmeans_feature_learning_class import KmeansLearning
 from includes.cnn_classifier_encoder_class import CnnClassifierEncoder
+from includes.raw_input_class import RawInput
 
 def create(type, args):
     if type == 'cnnClassifier':
@@ -13,6 +14,8 @@ def create(type, args):
         return KmeansLearning(**args)
     elif type == 'cnnAEClsfr':
         return CnnClassifierEncoder(**args)
+    elif type == 'rawInput':
+        return RawInput(**args)
     else:
         raise Exception("Unknown feature learning class type!")
 

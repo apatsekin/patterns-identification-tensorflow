@@ -27,7 +27,7 @@ def visualise2d_markers(data, labels, output_filename, cluster_type=None):
     records = []
     classes = np.unique(labels)
 
-    color = plt.cm.gist_ncar(np.linspace(0,1,len(classes)))
+    color = plt.cm.hsv(np.linspace(0,1,len(classes)))
 
     for n in range(len(data)):
         records.append([data[n][0], data[n][1],
@@ -40,7 +40,7 @@ def visualise2d_markers(data, labels, output_filename, cluster_type=None):
                        marker=markers[m])
         s_arr.append(s)
     plt.legend(tuple(s_arr), tuple(["{} #{}"
-                                   .format("Class" if cluster_type=="ground" else "Cluster", x+1) for x in classes]),
+                                   .format("Class" if cluster_type=="ground" else "Cluster", x) for x in classes]),
                                      scatterpoints=1,loc='best', ncol=1, fontsize=8, framealpha=1.0,fancybox=False)
     plt.xlabel('x')
     plt.ylabel('y')
