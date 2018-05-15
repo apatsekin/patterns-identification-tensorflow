@@ -119,16 +119,18 @@ class CnnEncoder(CnnVects):
                   stride=[1, 2, 2, 1],
                   scope='unpool_2d',
                   required_output_shape=None):
-      """Adds a 2D unpooling op.
+      """
+      2D unpooling operation for autoencoders, fully-convolutional nets, etc.
+      Supports pooling with argmax and without. Set ind = None to disable pooled position preservation.
       Paper: https://arxiv.org/abs/1505.04366
       Original & discussion: https://github.com/tensorflow/tensorflow/issues/2169
       Unpooling layer after max_pool_with_argmax.
            Args:
                pool:        max pooled output tensor
-               ind:         argmax indices
+               ind:         argmax indices from tf.nn.max_pool_with_argmax()
                stride:      stride is the same as for the pool
            Return:
-               unpool:    unpooling tensor
+               unpooled layer (tf tensor)
       """
 
       with tf.variable_scope(scope):

@@ -31,13 +31,12 @@ Feature learning described in [this paper](https://www-cs.stanford.edu/~acoates/
 Output includes t-SNE embedding for three types of clustering (K-means, DBSCAN, HDBSCAN) and ground truth coloring.
 Here goes the example of ground truth scatter plot for MNIST dataset (output from Quick start example):
 
-![Convolutional autoencoder as a feature-learning method for MNIST. T-SNE.](https://user-images.githubusercontent.com/15197972/39947762-0ec4247e-5541-11e8-83fa-33e5b81d5621.png)
+![Convolutional autoencoder as a feature-learning method for MNIST. T-SNE.](https://user-images.githubusercontent.com/15197972/40033814-038b7dbc-57c8-11e8-9fc8-067773be58f9.png)
 
 3D PCA reduction using Tensorboard Embedding:
 
 ![Convolutional autoencoder as a feature-learning method for MNIST. PCA Tensorboard Projector.](https://user-images.githubusercontent.com/15197972/39952082-b1b0ae9c-555e-11e8-8b2f-a2858aed1091.png)
 
-Note: MNIST dataset has a small enough input size to feed raw images directly into t-SNE. So it's just an example.
 
 ## Installation
 Python 3 and the following libraries are required. Installation using pip:
